@@ -1,4 +1,3 @@
-
 import streamlit as st
 from helper_functions.utility import check_password
 import json
@@ -7,8 +6,6 @@ from openai import OpenAI
 from datetime import datetime
 import pandas as pd
 import altair as alt
-from helper_functions import llm
-from logics.customer_query_handler import process_user_message
 
 
 
