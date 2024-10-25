@@ -6,7 +6,7 @@ from openai import OpenAI
 from datetime import datetime
 import pandas as pd
 import altair as alt
-
+import pytz
 
 # Retrieve the API key from Streamlit's secrets
 openai_api_key = st.secrets["OPENAI_API_KEY"]
@@ -198,8 +198,13 @@ def main():
         for api_url in api_urls.values():
             fetch_api_data(api_url)  # Just fetching without displaying any result
 
+
+        # Set the timezone to Singapore Time
+        sgt = pytz.timezone('Asia/Singapore')
+
+     
         # Add a timestamp message
-        current_time = datetime.now().strftime("%H:%M on %d/%m/%Y")
+        current_time = datetime.now(sgt).strftime("%H:%M on %d/%m/%Y")
         st.markdown(f'<start> Our responses are based on historical data from <a href="https://data.gov.sg/" target="_blank">data.gov.sg</a> as at {current_time}. For personalized consultations, please <a href="https://www.cpf.gov.sg/appt/oas/form" target="_blank">schedule an appointment</a> at one of our Service Centres. <end>', unsafe_allow_html=True)
 
         # Gather user information if not already collected
