@@ -42,6 +42,7 @@ def about_us():
         f"For personalized consultations, please <a href='https://www.cpf.gov.sg/appt/oas/form' target='_blank'>schedule an appointment</a> at one of our Service Centres."
     )
 
+    # Markdown content with sections and the timestamp message
     st.markdown(
         "## Project Scope\n"
         "The **Retirement Advisor Chatbot** is an innovative web application designed to provide users with accurate and timely information regarding retirement planning, particularly focused on the Central Provident Fund (CPF) in Singapore. By leveraging government data sources, the chatbot aims to assist individuals in understanding their retirement options and obligations, thereby empowering them to make informed decisions.\n\n"
@@ -57,17 +58,20 @@ def about_us():
         "- **Number of CPF Members & Net Balances**: Provides insights into CPF memberships categorized by age group and gender.\n"
         "- **Retirement Withdrawals**: Offers annual statistics on retirement withdrawals to inform users about trends and averages.\n"
         "- **Full Retirement Sum**: Details the full retirement sum that individuals should aim for as part of their CPF savings.\n"
-        "- **Monthly Payouts under Retirement Sum Scheme**: Displays information about the monthly payouts available to individuals under the retirement scheme.\n\n"
-      
-        f"<span style='font-size: smaller;'>{timestamp_message}</span>",  # Add the timestamp message with smaller font size
+        "- **Monthly Payouts under Retirement Sum Scheme**: Displays information about the monthly payouts available to individuals under the retirement scheme.\n\n",
         
         unsafe_allow_html=True  # Allow HTML for links and styling
-     
+    )
+
+    # Display the timestamp message separately
+    st.markdown(f"<span style='font-size: smaller;'>{timestamp_message}</span>", unsafe_allow_html=True)
+
+    # Continue with the Features section
+    st.markdown(
         "## Features\n"
         "The Retirement Advisor Chatbot includes several key features to enhance user interaction:\n"
         "- **Personalized Responses**: Utilizes OpenAI’s language model to generate answers tailored to user queries, taking into account individual circumstances like age and employment status.\n"
         "- **User Feedback Mechanism**: Allows users to provide feedback or compliments, which helps in continuously improving the chatbot's performance and user experience.\n"
-
     )
 
 
