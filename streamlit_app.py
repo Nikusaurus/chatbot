@@ -51,7 +51,11 @@ def about_us():
         "- **Retirement Withdrawals**: Offers annual statistics on retirement withdrawals to inform users about trends and averages.\n"
         "- **Full Retirement Sum**: Details the full retirement sum that individuals should aim for as part of their CPF savings.\n"
         "- **Monthly Payouts under Retirement Sum Scheme**: Displays information about the monthly payouts available to individuals under the retirement scheme.\n\n"
+
+         "In addition to these sources, we continuously monitor updates and changes to ensure the data remains relevant and beneficial to users. Our goal is to provide the most accurate and useful information to aid in retirement planning.\n\n"
         
+        f"<br>{timestamp_message}<br>\n\n"  # Add the timestamp message here
+     
         "## Features\n"
         "The Retirement Advisor Chatbot includes several key features to enhance user interaction:\n"
         "- **Personalized Responses**: Utilizes OpenAI’s language model to generate answers tailored to user queries, taking into account individual circumstances like age and employment status.\n"
