@@ -98,7 +98,7 @@ def handle_feedback():
 # Function to gather user information
 def gather_user_info():
     st.subheader("Tell us about yourself")
-    st.write("To help us give you a better personalised response, please tell us about yourself and why you are reaching out today. (Optional)")
+    st.write("To help us give you a better response, please tell us about yourself and why you are reaching out today. (Optional)")
     
     gender = st.selectbox("Gender", ["Select", "Male", "Female", "Other"])
     age_group = st.text_input("Age", "", placeholder="Enter your age")
