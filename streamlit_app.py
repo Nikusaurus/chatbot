@@ -106,6 +106,8 @@ def methodology():
         "- **User Action**: User receives and reviews the tailored information, potentially asking follow-up questions.\n"
     )
 
+    # Display the image
+    st.image("https://private-user-images.githubusercontent.com/137484447/380223393-b3a12cd9-17e9-478f-9bf5-e049a93f8006.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mjk4Njk1MjYsIm5iZiI6MTcyOTg2OTIyNiwicGF0aCI6Ii8xMzc0ODQ0NDcvMzgwMjIzMzkzLWIzYTEyY2Q5LTE3ZTktNDc4Zi05YmY1LWUwNDlhOTNmODAwNi5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQxMDI1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MTAyNVQxNTEzNDZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1mMGM4ZTJlODUzYTZjNDM2MmRmY2U4ZTg1MTk4MTY5MTE5YTM3ZGM3MTZhNGZiZDRlNDQwYzQyNzk5OGFhODY3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.BaABg3XsppHgaYGmTB5jC6O-fn-NRTS-IGc2Hvarjw4", caption="USe Case 2", use_column_width=True)
 
     # Use Case 3: Customer Satisfaction Evaluation
     st.subheader("3. Customer Satisfaction Evaluation")
@@ -117,6 +119,10 @@ def methodology():
         "- **User Response**: Confirms receipt of feedback.\n"
     )
 
+    # Display the image
+    st.image("https://private-user-images.githubusercontent.com/137484447/380223414-73914284-3b10-4776-a251-0e5d73a65df1.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mjk4Njk1MjYsIm5iZiI6MTcyOTg2OTIyNiwicGF0aCI6Ii8xMzc0ODQ0NDcvMzgwMjIzNDE0LTczOTE0Mjg0LTNiMTAtNDc3Ni1hMjUxLTBlNWQ3M2E2NWRmMS5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQxMDI1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MTAyNVQxNTEzNDZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lZTkxYzkxMzhkOGI1YjJkMDU5NTM2N2FkMmFkMWMxMDRjOTRkMzU5OGM3NDE1NmQ5YmU4NWE4MzQzN2ZmMTY3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.1YtVoIByOgAPXwGHcAOzybCCdZG99pbJtEMg34vOra4", caption="USe Case 3", use_column_width=True)
+
+ 
     # Summary
     st.markdown(
         "Each use case contributes to the chatbot’s ongoing refinement, enhancing accuracy, security, and responsiveness. "
