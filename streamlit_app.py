@@ -8,7 +8,9 @@ import pandas as pd
 import altair as alt
 
 
-
+# Retrieve the API key from Streamlit's secrets
+openai_api_key = st.secrets["OPENAI_API_KEY"]
+ 
 
 # Hardcoded API URLs
 api_urls = {
