@@ -89,6 +89,11 @@ def methodology():
         "- **User Action**: User views response.\n"
     )
 
+    
+    # Display the image
+    st.image("https://private-user-images.githubusercontent.com/137484447/380222051-ad987342-b2ac-4c5f-8f5c-23b53d38aebc.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mjk4NjkzNTEsIm5iZiI6MTcyOTg2OTA1MSwicGF0aCI6Ii8xMzc0ODQ0NDcvMzgwMjIyMDUxLWFkOTg3MzQyLWIyYWMtNGM1Zi04ZjVjLTIzYjUzZDM4YWViYy5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQxMDI1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MTAyNVQxNTEwNTFaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT03MTY4NWE1ZDBkZmE3OWI0MjM2NjRlN2Q2MDI3Y2I0ODA3NDNhYzM3MjYwYWIwMTA5NDM5ZTE3MjhmYjJmYmJjJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.FERpl3JeJ1YaXDKBFvf8VYarevJz4OUV1qtDBiX7gK0", caption="USe Case 1", use_column_width=True)
+    
+     
     # Use Case 2: Personalized Adviser
     st.subheader("2. Personalized Adviser")
     st.markdown(
