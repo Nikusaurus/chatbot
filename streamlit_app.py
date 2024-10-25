@@ -177,10 +177,6 @@ def main():
             "This is an interactive chatbot that provides personalized information about retirement milestones and preparations related to your CPF."
         )
 
-        #### Password protection: Check if the password is correct
-        if not check_password():
-            st.stop()  # Stop the app if the password is incorrect
-
         # Display the disclaimer
         with st.expander("IMPORTANT NOTICE", expanded=False):
             st.write(""" 
@@ -190,6 +186,10 @@ def main():
             You assume full responsibility for how you use any generated output.
             Always consult with qualified professionals for accurate and personalized advice.
             """)
+
+        #### Password protection: Check if the password is correct
+        if not check_password():
+            st.stop()  # Stop the app if the password is incorrect
 
         # Use the OpenAI client with the secret API key
         client = OpenAI(api_key=openai_api_key)
