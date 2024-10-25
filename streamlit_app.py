@@ -63,12 +63,64 @@ def about_us():
 
 
 # Methodology page
+
 def methodology():
     st.title("Methodology")
-    st.write(
-        "The chatbot retrieves information based on user queries and fetches data from predefined API sources. "
-        "The implementation uses OpenAI's language model to process the user's questions and provide accurate responses."
+
+    # Page Introduction
+    st.markdown(
+        "The **Retirement Advisor Chatbot** is a multi-functional application designed to streamline user interactions with CPF-related information. "
+        "Through advanced AI processing, prompt engineering, and real-time data integration, this chatbot provides personalized responses, guided search, "
+        "and customer satisfaction feedback, all built on reliable government data sources."
     )
+    
+    st.markdown("This **Methodology** section explains the chatbot’s data flows and implementation details for three main use cases:")
+
+    # Use Case 1: Information Chat
+    st.subheader("1. Information Chat")
+    st.markdown(
+        "- **User Action**: User submits a factual question about CPF, e.g., 'What is the Full Retirement Sum?'\n"
+        "- **App Function**: Routes query to Information Chat pipeline.\n"
+        "- **Prompt Engineering**: Focused LLM response on CPF content.\n"
+        "- **Prompt Chaining**: Decomposes complex questions for clarity.\n"
+        "- **LLM Processing**: Generates answer based on CPF context.\n"
+        "- **Data Retrieval**: Supplementary data fetched from APIs (e.g., CPF Full Retirement Sum).\n"
+        "- **Output with Timestamp**: Adds timestamp and disclaimer.\n"
+        "- **User Action**: User views response.\n"
+    )
+
+    # Use Case 2: Intelligent Search
+    st.subheader("2. Intelligent Search")
+    st.markdown(
+        "- **User Action**: User submits a detailed or comparative question, e.g., 'Show CPF balances by age group and gender.'\n"
+        "- **App Function**: Parses and categorizes query.\n"
+        "- **Data Processing**: Fetches necessary fields from CPF APIs.\n"
+        "- **LLM Summarization**: Summarizes complex data for user comprehension.\n"
+        "- **Prompt Injection Defense**: Uses techniques like delimiters, XML-like tags, and Sandwich Defense.\n"
+        "- **Output**: Presents summary with timestamp and disclaimer.\n"
+        "- **User Action**: User reviews information.\n"
+    )
+
+    # Use Case 3: Customer Satisfaction Evaluation
+    st.subheader("3. Customer Satisfaction Evaluation")
+    st.markdown(
+        "- **User Action**: User selects feedback options (compliment, complaint, or general feedback).\n"
+        "- **App Function**: Displays feedback form.\n"
+        "- **Data Categorization**: Categorizes feedback type, applies Sentiment Analysis where necessary.\n"
+        "- **Feedback Storage and Analysis**: Stores and analyzes feedback for improvements.\n"
+        "- **User Response**: Confirms receipt of feedback.\n"
+    )
+
+    # Summary
+    st.markdown(
+        "Each use case contributes to the chatbot’s ongoing refinement, enhancing accuracy, security, and responsiveness. "
+        "By accurately responding to questions, navigating complex queries, and incorporating user feedback, the chatbot remains a reliable source of CPF information."
+    )
+
+
+
+
+
 
 # Function to handle compliments, feedback, and complaints
 def handle_feedback():
