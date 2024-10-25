@@ -195,11 +195,14 @@ def main():
 
 
         # Ask user for their OpenAI API key via st.text_input.
-        openai_api_key = st.text_input("OpenAI API Key", type="password")
-        if openai_api_key:
-            # Create an OpenAI client.
-            client = OpenAI(api_key=openai_api_key)
+        # openai_api_key = st.text_input("OpenAI API Key", type="password")
+        # if openai_api_key:
+        #     # Create an OpenAI client.
+        #     client = OpenAI(api_key=openai_api_key)
 
+            # Use the OpenAI client with the secret API key
+            client = OpenAI(api_key=openai_api_key)
+     
             # Automatically fetch data from all API URLs (no output displayed)
             for api_url in api_urls.values():
                 fetch_api_data(api_url)  # Just fetching without displaying any result
