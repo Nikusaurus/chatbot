@@ -11,13 +11,12 @@ import pytz
 # Retrieve the API key from Streamlit's secrets
 openai_api_key = st.secrets["OPENAI_API_KEY"]
  
-
 # Hardcoded API URLs
 api_urls = {
     "Number of CPF Members & Net Balances by Age Group & Gender as at End of Year": "https://api-production.data.gov.sg/v2/public/api/collections/46/metadata",
     "Retirement withdrawals, Annual": "https://api-production.data.gov.sg/v2/public/api/collections/43/metadata",
-     "Full Retirement Sum": "https://data.gov.sg/api/action/datastore_search?resource_id=d_b212dff55c98a4c0b3d3d850bf744ad7",
-     "Yearly amount of monthly payout under Retirement Sum Scheme": "https://data.gov.sg/api/action/datastore_search?resource_id=d_c055f39619d2e8a8e0ddf87823b1066d"
+    "Full Retirement Sum": "https://data.gov.sg/api/action/datastore_search?resource_id=d_b212dff55c98a4c0b3d3d850bf744ad7",
+    "Yearly amount of monthly payout under Retirement Sum Scheme": "https://data.gov.sg/api/action/datastore_search?resource_id=d_c055f39619d2e8a8e0ddf87823b1066d"
 }
 
 # Function to fetch data from a given API URL
@@ -83,17 +82,10 @@ def handle_feedback():
                 st.success("Thank you for your feedback. Please allow us to investigate and get back to you in 5 working days!")
             elif feedback_type == "Complaints":
                 st.success("We apologise for the experience. Please allow us to investigate and get back to you in 5 working days!")
+            # Redirect to Chatbot page after feedback submission
+            st.session_state.page = "Chatbot"  
         else:
             st.warning("Please enter a message before submitting.")  # Alert user if message is empty
-
-    if st.button("Return"):
-        # Clear session state attributes to reset the session
-        for key in ["user_info", "messages", "page", "conversation_chain"]:
-            if key in st.session_state:
-                del st.session_state[key]  # Remove the keys to reset the session
-                
-        st.session_state.page = "Chatbot"  # Set page to "Chatbot"
-        return  # Exit the function to redirect to the Chatbot page immediately
 
 # Function to gather user information
 def gather_user_info():
@@ -135,7 +127,6 @@ def gather_user_info():
     # Redirect to feedback page only if a feedback option is selected
     if topic in ["Compliments", "Feedback", "Complaints"]:
         st.session_state.page = "Feedback"
-        return  # Exit the function to redirect to the Feedback page immediately
     else:
         st.session_state.page = "Chatbot"  # Reset if not redirecting
 
@@ -153,8 +144,6 @@ def create_structured_prompt(user_info, prompt):
 
 # Main function to control page routing and chatbot logic
 def main():
-
- 
 
     # Initialize page in session state if not already set
     if "page" not in st.session_state:
@@ -196,73 +185,40 @@ def main():
         for api_url in api_urls.values():
             fetch_api_data(api_url)  # Just fetching without displaying any result
 
-
         # Set the timezone to Singapore Time
         sgt = pytz.timezone('Asia/Singapore')
 
-     
         # Add a timestamp message
         current_time = datetime.now(sgt).strftime("%H:%M on %d/%m/%Y")
         st.markdown(
-             f'<start> <span style="font-size: smaller;">Our responses are based on historical data from <a href="https://data.gov.sg/" target="_blank">data.gov.sg</a> as at {current_time}. For personalized consultations, please <a href="https://www.cpf.gov.sg/appt/oas/form" target="_blank">schedule an appointment</a> at one of our Service Centres.</span> <end>',
-    unsafe_allow_html=True)
-     
-        # Gather user information if not already collected
-        if "user_info" not in st.session_state:
-            gather_user_info()
-        else:
-            # User information has already been collected, no need to gather again
-            pass
+            f'<start> <span style="font-size: smaller;">Our responses are based on historical data from <a href="https://data.gov.sg/" target="_blank">data.gov.sg</a>. Current time is {current_time}.</span> </start>',
+            unsafe_allow_html=True
+        )
 
-        # Create a session state variable to store the chat messages.
-        if "messages" not in st.session_state:
-            st.session_state.messages = []
-            st.session_state.conversation_chain = []  # Initialize conversation chain
+        # User input for queries
+        user_input = st.text_input("Type your query here...", placeholder="Ask about CPF or retirement matters...")
+        
+        if st.button("Ask"):
+            if user_input:
+                user_info = {
+                    "gender": st.session_state.user_info.get("gender"),
+                    "age_group": st.session_state.user_info.get("age_group"),
+                    "employment_status": st.session_state.user_info.get("employment_status")
+                }
+                structured_prompt = create_structured_prompt(user_info, user_input)
 
-        # Display all messages in the chat
-        if "messages" in st.session_state:
-            for message in st.session_state.messages:
-                with st.chat_message(message["role"]):
-                    st.markdown(message["content"])
-
-        # Create a chat input field to allow the user to enter a message.
-        if prompt := st.chat_input("Ask a question about government services:"):
-            # Store and display the current prompt.
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            with st.chat_message("user"):
-                st.markdown(prompt)
-
-            # Generate a structured prompt based on user information (if provided)
-            if "user_info" in st.session_state:
-                user_info = st.session_state.user_info
-                structured_prompt = create_structured_prompt(user_info, prompt)
+                # Generate response from the OpenAI API
+                try:
+                    response = client.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=[{"role": "user", "content": structured_prompt}],
+                        temperature=0  # Set to 0 for factual answers
+                    )
+                    st.success(response["choices"][0]["message"]["content"].strip())
+                except Exception as e:
+                    st.error(f"An error occurred: {str(e)}")  # Display any error messages
             else:
-                # If no user info is provided, fallback to a basic prompt
-                structured_prompt = f"<User Query>\n{prompt}\n<End of User Input>"
-
-            # Store the structured prompt in session state
-            st.session_state.messages.append({"role": "user", "content": structured_prompt})
-
-            # Add structured prompt to the conversation chain
-            st.session_state.conversation_chain.append(structured_prompt)
-
-            # Generate a response using the OpenAI API with a factual setting.
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages] + 
-                         [{"role": "assistant", "content": step} for step in st.session_state.conversation_chain],
-                temperature=0,  # Set temperature to 0 for factual responses
-            )
-
-            # Extract and display the response
-            answer = response.choices[0].message.content.strip()
-            st.session_state.messages.append({"role": "assistant", "content": answer})
-
-            with st.chat_message("assistant"):
-                st.markdown(answer)
-
-            # Add assistant response to the conversation chain to continue sequential processing
-            st.session_state.conversation_chain.append(answer)
+                st.warning("Please enter a query before asking.")  # Alert user if input is empty
 
     elif page == "About Us":
         about_us()
