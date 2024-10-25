@@ -200,73 +200,73 @@ def main():
         #     # Create an OpenAI client.
         #     client = OpenAI(api_key=openai_api_key)
 
-            # Use the OpenAI client with the secret API key
-            client = OpenAI(api_key=openai_api_key)
-     
-            # Automatically fetch data from all API URLs (no output displayed)
-            for api_url in api_urls.values():
-                fetch_api_data(api_url)  # Just fetching without displaying any result
+        # Use the OpenAI client with the secret API key
+        client = OpenAI(api_key=openai_api_key)
+ 
+        # Automatically fetch data from all API URLs (no output displayed)
+        for api_url in api_urls.values():
+            fetch_api_data(api_url)  # Just fetching without displaying any result
 
-            # Add a timestamp message
-            current_time = datetime.now().strftime("%H:%M on %d/%m/%Y")
-            st.markdown(f'<start> Responses are based on <a href="https://data.gov.sg/" target="_blank">"https://data.gov.sg/"</a> as at {current_time} <end>', unsafe_allow_html=True)
+        # Add a timestamp message
+        current_time = datetime.now().strftime("%H:%M on %d/%m/%Y")
+        st.markdown(f'<start> Responses are based on <a href="https://data.gov.sg/" target="_blank">"https://data.gov.sg/"</a> as at {current_time} <end>', unsafe_allow_html=True)
 
-            # Gather user information if not already collected
-            if "user_info" not in st.session_state:
-                gather_user_info()
+        # Gather user information if not already collected
+        if "user_info" not in st.session_state:
+            gather_user_info()
+        else:
+            # User information has already been collected, no need to gather again
+            pass
+
+        # Create a session state variable to store the chat messages.
+        if "messages" not in st.session_state:
+            st.session_state.messages = []
+            st.session_state.conversation_chain = []  # Initialize conversation chain
+
+        # Display all messages in the chat
+        if "messages" in st.session_state:
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
+
+        # Create a chat input field to allow the user to enter a message.
+        if prompt := st.chat_input("Ask a question about government services:"):
+            # Store and display the current prompt.
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            with st.chat_message("user"):
+                st.markdown(prompt)
+
+            # Generate a structured prompt based on user information (if provided)
+            if "user_info" in st.session_state:
+                user_info = st.session_state.user_info
+                structured_prompt = create_structured_prompt(user_info, prompt)
             else:
-                # User information has already been collected, no need to gather again
-                pass
+                # If no user info is provided, fallback to a basic prompt
+                structured_prompt = f"<User Query>\n{prompt}\n<End of User Input>"
 
-            # Create a session state variable to store the chat messages.
-            if "messages" not in st.session_state:
-                st.session_state.messages = []
-                st.session_state.conversation_chain = []  # Initialize conversation chain
+            # Store the structured prompt in session state
+            st.session_state.messages.append({"role": "user", "content": structured_prompt})
 
-            # Display all messages in the chat
-            if "messages" in st.session_state:
-                for message in st.session_state.messages:
-                    with st.chat_message(message["role"]):
-                        st.markdown(message["content"])
+            # Add structured prompt to the conversation chain
+            st.session_state.conversation_chain.append(structured_prompt)
 
-            # Create a chat input field to allow the user to enter a message.
-            if prompt := st.chat_input("Ask a question about government services:"):
-                # Store and display the current prompt.
-                st.session_state.messages.append({"role": "user", "content": prompt})
-                with st.chat_message("user"):
-                    st.markdown(prompt)
+            # Generate a response using the OpenAI API with a factual setting.
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages] + 
+                         [{"role": "assistant", "content": step} for step in st.session_state.conversation_chain],
+                temperature=0,  # Set temperature to 0 for factual responses
+            )
 
-                # Generate a structured prompt based on user information (if provided)
-                if "user_info" in st.session_state:
-                    user_info = st.session_state.user_info
-                    structured_prompt = create_structured_prompt(user_info, prompt)
-                else:
-                    # If no user info is provided, fallback to a basic prompt
-                    structured_prompt = f"<User Query>\n{prompt}\n<End of User Input>"
+            # Extract and display the response
+            answer = response.choices[0].message.content.strip()
+            st.session_state.messages.append({"role": "assistant", "content": answer})
 
-                # Store the structured prompt in session state
-                st.session_state.messages.append({"role": "user", "content": structured_prompt})
+            with st.chat_message("assistant"):
+                st.markdown(answer)
 
-                # Add structured prompt to the conversation chain
-                st.session_state.conversation_chain.append(structured_prompt)
-
-                # Generate a response using the OpenAI API with a factual setting.
-                response = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages] + 
-                             [{"role": "assistant", "content": step} for step in st.session_state.conversation_chain],
-                    temperature=0,  # Set temperature to 0 for factual responses
-                )
-
-                # Extract and display the response
-                answer = response.choices[0].message.content.strip()
-                st.session_state.messages.append({"role": "assistant", "content": answer})
-
-                with st.chat_message("assistant"):
-                    st.markdown(answer)
-
-                # Add assistant response to the conversation chain to continue sequential processing
-                st.session_state.conversation_chain.append(answer)
+            # Add assistant response to the conversation chain to continue sequential processing
+            st.session_state.conversation_chain.append(answer)
 
     elif page == "About Us":
         about_us()
