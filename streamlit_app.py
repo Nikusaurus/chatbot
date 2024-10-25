@@ -50,7 +50,7 @@ def about_us():
         "- **Number of CPF Members & Net Balances**: Provides insights into CPF memberships categorized by age group and gender.\n"
         "- **Retirement Withdrawals**: Offers annual statistics on retirement withdrawals to inform users about trends and averages.\n"
         "- **Full Retirement Sum**: Details the full retirement sum that individuals should aim for as part of their CPF savings.\n"
-        "- **Monthly Payouts under Retirement Sum Scheme**: Displays information about the monthly payouts available to individuals under the retirement scheme.\n\n"
+        "- **Monthly Payouts under Retirement Sum Scheme**: Displays information about the monthly payouts available to individuals under the retirement scheme.\n"
         "- **Data reference is also date/time-stamped on the Chatbot page to alert users to recency of information.\n\n"
         
         "## Features\n"
