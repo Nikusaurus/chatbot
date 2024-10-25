@@ -89,17 +89,17 @@ def methodology():
         "- **User Action**: User views response.\n"
     )
 
-# Use Case 2: Personalized Adviser
-st.subheader("2. Personalized Adviser")
-st.markdown(
-    "- **User Action**: User provides personal details, such as gender, age, employment status, and topics of interest (e.g., 'What are my retirement options?').\n"
-    "- **App Function**: Performs Contextual Parsing to analyze the user's input along with the provided personal details.\n"
-    "- **Data Processing**: Retrieves relevant fields from stored government data or real-time API calls based on the user's profile and query.\n"
-    "- **LLM Summarization**: The LLM consolidates and summarizes the data, generating a personalized response tailored to the user's circumstances.\n"
-    "- **Prompt Injection Defense**: Applies techniques like XML-like tags, delimiters, and Sandwich Defense to safeguard against prompt injection.\n"
-    "- **Output**: Delivers the personalized response to the user, including a timestamp and disclaimer.\n"
-    "- **User Action**: User receives and reviews the tailored information, potentially asking follow-up questions.\n"
-)
+    # Use Case 2: Personalized Adviser
+    st.subheader("2. Personalized Adviser")
+    st.markdown(
+        "- **User Action**: User provides personal details, such as gender, age, employment status, and topics of interest (e.g., 'What are my retirement options?').\n"
+        "- **App Function**: Performs Contextual Parsing to analyze the user's input along with the provided personal details.\n"
+        "- **Data Processing**: Retrieves relevant fields from stored government data or real-time API calls based on the user's profile and query.\n"
+        "- **LLM Summarization**: The LLM consolidates and summarizes the data, generating a personalized response tailored to the user's circumstances.\n"
+        "- **Prompt Injection Defense**: Applies techniques like XML-like tags, delimiters, and Sandwich Defense to safeguard against prompt injection.\n"
+        "- **Output**: Delivers the personalized response to the user, including a timestamp and disclaimer.\n"
+        "- **User Action**: User receives and reviews the tailored information, potentially asking follow-up questions.\n"
+    )
 
 
     # Use Case 3: Customer Satisfaction Evaluation
