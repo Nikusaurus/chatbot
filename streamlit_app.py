@@ -1,17 +1,23 @@
 import streamlit as st
 from helper_functions.utility import check_password
+import json
 import requests
 from openai import OpenAI
 from datetime import datetime
+import pandas as pd
+import altair as alt
 import pytz
 
 # Retrieve the API key from Streamlit's secrets
 openai_api_key = st.secrets["OPENAI_API_KEY"]
+ 
 
 # Hardcoded API URLs
 api_urls = {
-    "Number of CPF Members": "https://api-production.data.gov.sg/v2/public/api/collections/46/metadata",
-    "Retirement withdrawals": "https://api-production.data.gov.sg/v2/public/api/collections/43/metadata"
+    "Number of CPF Members & Net Balances by Age Group & Gender as at End of Year": "https://api-production.data.gov.sg/v2/public/api/collections/46/metadata",
+    "Retirement withdrawals, Annual": "https://api-production.data.gov.sg/v2/public/api/collections/43/metadata",
+     "Full Retirement Sum": "https://data.gov.sg/api/action/datastore_search?resource_id=d_b212dff55c98a4c0b3d3d850bf744ad7",
+     "Yearly amount of monthly payout under Retirement Sum Scheme": "https://data.gov.sg/api/action/datastore_search?resource_id=d_c055f39619d2e8a8e0ddf87823b1066d"
 }
 
 # Function to fetch data from a given API URL
@@ -28,31 +34,48 @@ def fetch_api_data(url):
 # About Us page
 def about_us():
     st.title("About Us")
-    st.write("This project aims to create a government chatbot that provides factual information to users. The chatbot pulls data from various government sources to answer queries.")
+    st.write(
+        "This project aims to create a government chatbot that provides factual information to users. "
+        "The chatbot pulls data from various government sources to answer queries."
+    )
 
 # Methodology page
 def methodology():
     st.title("Methodology")
-    st.write("The chatbot retrieves information based on user queries and fetches data from predefined API sources. The implementation uses OpenAI's language model to process the user's questions and provide accurate responses.")
+    st.write(
+        "The chatbot retrieves information based on user queries and fetches data from predefined API sources. "
+        "The implementation uses OpenAI's language model to process the user's questions and provide accurate responses."
+    )
 
 # Function to handle compliments, feedback, and complaints
 def handle_feedback():
     st.title("Feedback")
     feedback_type = st.radio("Select the type of feedback:", 
                               ("Select", "Compliments", "Feedback", "Complaints"), 
-                              index=0)
+                              index=0)  # Default to the first option "Select"
 
     feedback_message = st.text_area("Please enter your message:")
     
+    # Add a slider for customer satisfaction rating (1 to 5 stars)
     rating = st.slider("Please rate your experience:", 
-                       min_value=1, max_value=5, value=1, step=1)
+                       min_value=1, max_value=5, value=1, step=1)  # Default to 1 star
     
-    stars = "⭐" * rating
+    # Display the selected stars
+    stars = "⭐" * rating  # Create a string of stars based on the rating
     st.markdown(f"**Your Rating:** {stars}")
 
-    st.markdown("⭐ - Very Dissatisfied, ⭐⭐ - Dissatisfied, ⭐⭐⭐ - Neutral, ⭐⭐⭐⭐ - Satisfied, ⭐⭐⭐⭐⭐ - Very Satisfied")
+    # Display interval labels
+    st.markdown(""" 
+        ⭐ - Very Dissatisfied, 
+        ⭐⭐ - Dissatisfied, 
+        ⭐⭐⭐ - Neutral, 
+        ⭐⭐⭐⭐ - Satisfied, 
+        ⭐⭐⭐⭐⭐ - Very Satisfied
+    """)
 
+    # Check if the feedback has been submitted
     if st.button("Submit"):
+        # Only show success message if feedback_message is not empty
         if feedback_message:
             if feedback_type == "Compliments":
                 st.success("Thank you for your feedback. We will be sure to pass your compliments to our colleague!")
@@ -61,15 +84,16 @@ def handle_feedback():
             elif feedback_type == "Complaints":
                 st.success("We apologise for the experience. Please allow us to investigate and get back to you in 5 working days!")
         else:
-            st.warning("Please enter a message before submitting.")
+            st.warning("Please enter a message before submitting.")  # Alert user if message is empty
 
     if st.button("Return"):
+        # Clear session state attributes to reset the session
         for key in ["user_info", "messages", "page", "conversation_chain"]:
             if key in st.session_state:
-                del st.session_state[key]
+                del st.session_state[key]  # Remove the keys to reset the session
                 
         st.session_state.page = "Chatbot"  # Set page to "Chatbot"
-        return
+        return  # Exit the function to redirect to the Chatbot page immediately
 
 # Function to gather user information
 def gather_user_info():
@@ -82,32 +106,38 @@ def gather_user_info():
     employment_status = st.selectbox("Employment Status", ["Select", "Employed", "Self-employed", "Unemployed", "Student", "Retired"])
     topic = st.selectbox("What would you like to talk about?", ["Select", "Compliments", "Feedback", "Enquiry", "Complaints", "Appeals"])
 
-    col1, col2 = st.columns([1, 6])
+    # Create two columns for the button and the placeholder message
+    col1, col2 = st.columns([1, 6])  # Adjust the ratio as needed
 
     with col1:
         if st.button("Submit"):
+            # Check if age_group is not empty and is numeric
             if age_group and not age_group.isdigit():
-                st.error("Please enter a valid number for your age.")
+                st.error("Please enter a valid number for your age.")  # Show error message if age is invalid
             else:
+                # If valid, proceed to save the information
                 st.session_state.user_info = {
                     "gender": gender if gender != "Select" else None,
                     "age_group": age_group,
                     "employment_status": employment_status if employment_status != "Select" else None,
                     "topic": topic if topic != "Select" else None
                 }
-                st.session_state.submitted = True
+                st.session_state.submitted = True  # Set the flag to True
 
     with col2:
+        # Add a placeholder message next to the submit button
         st.markdown("<span style='font-size: 14px; color: gray;'>Please ensure app has stopped 'RUNNING' before clicking SUBMIT</span>", unsafe_allow_html=True)
 
+    # Display success message below the button if it has been submitted
     if "submitted" in st.session_state and st.session_state.submitted:
-        st.success("Thank you for providing your information!")
+        st.success("Thank you for providing your information!")  # Position below the button
 
+    # Redirect to feedback page only if a feedback option is selected
     if topic in ["Compliments", "Feedback", "Complaints"]:
         st.session_state.page = "Feedback"
-        return
+        return  # Exit the function to redirect to the Feedback page immediately
     else:
-        st.session_state.page = "Chatbot"
+        st.session_state.page = "Chatbot"  # Reset if not redirecting
 
 # Function to create a structured prompt
 def create_structured_prompt(user_info, prompt):
@@ -123,6 +153,10 @@ def create_structured_prompt(user_info, prompt):
 
 # Main function to control page routing and chatbot logic
 def main():
+
+ 
+
+    # Initialize page in session state if not already set
     if "page" not in st.session_state:
         st.session_state.page = "Chatbot"
     
@@ -135,8 +169,11 @@ def main():
         return
 
     if page == "Chatbot":
+        # Show title and description.
         st.title("💬 Retirement Advisor")
-        st.write("This is an interactive chatbot that provides personalized information about retirement milestones and preparations related to your CPF.")
+        st.write(
+            "This is an interactive chatbot that provides personalized information about retirement milestones and preparations related to your CPF."
+        )
 
         # Display the disclaimer
         with st.expander("IMPORTANT NOTICE", expanded=False):
@@ -154,13 +191,15 @@ def main():
 
         # Use the OpenAI client with the secret API key
         client = OpenAI(api_key=openai_api_key)
-
+ 
         # Automatically fetch data from all API URLs (no output displayed)
         for api_url in api_urls.values():
             fetch_api_data(api_url)  # Just fetching without displaying any result
 
+
         # Set the timezone to Singapore Time
         sgt = pytz.timezone('Asia/Singapore')
+
      
         # Add a timestamp message
         current_time = datetime.now(sgt).strftime("%H:%M on %d/%m/%Y")
@@ -171,6 +210,9 @@ def main():
         # Gather user information if not already collected
         if "user_info" not in st.session_state:
             gather_user_info()
+        else:
+            # User information has already been collected, no need to gather again
+            pass
 
         # Create a session state variable to store the chat messages.
         if "messages" not in st.session_state:
@@ -195,32 +237,37 @@ def main():
                 user_info = st.session_state.user_info
                 structured_prompt = create_structured_prompt(user_info, prompt)
             else:
+                # If no user info is provided, fallback to a basic prompt
                 structured_prompt = f"<User Query>\n{prompt}\n<End of User Input>"
 
             # Store the structured prompt in session state
+            st.session_state.messages.append({"role": "user", "content": structured_prompt})
+
+            # Add structured prompt to the conversation chain
             st.session_state.conversation_chain.append(structured_prompt)
 
-            # Call the OpenAI model and get the response
-            response = client.Completion.create(
+            # Generate a response using the OpenAI API with a factual setting.
+            response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
-                prompt=structured_prompt,
-                max_tokens=100
+                messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages] + 
+                         [{"role": "assistant", "content": step} for step in st.session_state.conversation_chain],
+                temperature=0,  # Set temperature to 0 for factual responses
             )
 
-            # Store and display the response.
-            response_text = response['choices'][0]['text'].strip()
-            st.session_state.messages.append({"role": "assistant", "content": response_text})
-            with st.chat_message("assistant"):
-                st.markdown(response_text)
+            # Extract and display the response
+            answer = response.choices[0].message.content.strip()
+            st.session_state.messages.append({"role": "assistant", "content": answer})
 
-            # Optionally, reset the user input field.
-            st.experimental_rerun()
+            with st.chat_message("assistant"):
+                st.markdown(answer)
+
+            # Add assistant response to the conversation chain to continue sequential processing
+            st.session_state.conversation_chain.append(answer)
 
     elif page == "About Us":
         about_us()
     elif page == "Methodology":
         methodology()
 
-# Run the main function
 if __name__ == "__main__":
     main()
