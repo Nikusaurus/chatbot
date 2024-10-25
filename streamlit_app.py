@@ -16,6 +16,8 @@ openai_api_key = st.secrets["OPENAI_API_KEY"]
 api_urls = {
     "Number of CPF Members & Net Balances by Age Group & Gender as at End of Year": "https://api-production.data.gov.sg/v2/public/api/collections/46/metadata",
     "Retirement withdrawals, Annual": "https://api-production.data.gov.sg/v2/public/api/collections/43/metadata"
+     "Full Retirement Sum": "https://data.gov.sg/api/action/datastore_search?resource_id=d_b212dff55c98a4c0b3d3d850bf744ad7"
+     "Yearly amount of monthly payout under Retirement Sum Scheme": "https://data.gov.sg/api/action/datastore_search?resource_id=d_c055f39619d2e8a8e0ddf87823b1066d"
 }
 
 # Function to fetch data from a given API URL
@@ -170,9 +172,9 @@ def main():
 
     if page == "Chatbot":
         # Show title and description.
-        st.title("💬 Government Chatbot")
+        st.title("💬 Retirement Advisor")
         st.write(
-            "This is a government chatbot that provides factual information using OpenAI's GPT-3.5 model. "
+            "This is an interactive chatbot that provides personalized information about retirement milestones and preparations related to your CPF."
         )
 
         #### Password protection: Check if the password is correct
