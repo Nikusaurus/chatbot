@@ -152,10 +152,9 @@ def create_structured_prompt(user_info, prompt):
 # Main function to control page routing and chatbot logic
 def main():
 
-    #### Password protection: Check if the password is correct
-    if not check_password():
-        st.stop()  # Stop the app if the password is incorrect
-
+    # #### Password protection: Check if the password is correct
+    # if not check_password():
+    #     st.stop()  # Stop the app if the password is incorrect
 
     # Initialize page in session state if not already set
     if "page" not in st.session_state:
@@ -174,8 +173,11 @@ def main():
         st.title("💬 Government Chatbot")
         st.write(
             "This is a government chatbot that provides factual information using OpenAI's GPT-3.5 model. "
-            "Please provide your OpenAI API key."
         )
+
+        #### Password protection: Check if the password is correct
+        if not check_password():
+            st.stop()  # Stop the app if the password is incorrect
 
         # Display the disclaimer
         with st.expander("IMPORTANT NOTICE", expanded=False):
@@ -186,19 +188,6 @@ def main():
             You assume full responsibility for how you use any generated output.
             Always consult with qualified professionals for accurate and personalized advice.
             """)
-
-####################################
-# Check if the password is correct
-# if not check_password():  
-#     st.stop()
-####################################
-
-
-        # Ask user for their OpenAI API key via st.text_input.
-        # openai_api_key = st.text_input("OpenAI API Key", type="password")
-        # if openai_api_key:
-        #     # Create an OpenAI client.
-        #     client = OpenAI(api_key=openai_api_key)
 
         # Use the OpenAI client with the secret API key
         client = OpenAI(api_key=openai_api_key)
