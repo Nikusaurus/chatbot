@@ -205,8 +205,10 @@ def main():
      
         # Add a timestamp message
         current_time = datetime.now(sgt).strftime("%H:%M on %d/%m/%Y")
-        st.markdown(f'<start> Our responses are based on historical data from <a href="https://data.gov.sg/" target="_blank">data.gov.sg</a> as at {current_time}. For personalized consultations, please <a href="https://www.cpf.gov.sg/appt/oas/form" target="_blank">schedule an appointment</a> at one of our Service Centres. <end>', unsafe_allow_html=True)
-
+        st.markdown(
+             f'<start> <span style="font-size: smaller;">Our responses are based on historical data from <a href="https://data.gov.sg/" target="_blank">data.gov.sg</a> as at {current_time}. For personalized consultations, please <a href="https://www.cpf.gov.sg/appt/oas/form" target="_blank">schedule an appointment</a> at one of our Service Centres.</span> <end>',
+    unsafe_allow_html=True)
+     
         # Gather user information if not already collected
         if "user_info" not in st.session_state:
             gather_user_info()
