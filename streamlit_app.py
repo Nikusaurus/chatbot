@@ -34,10 +34,31 @@ def fetch_api_data(url):
 # About Us page
 def about_us():
     st.title("About Us")
-    st.write(
-        "This project aims to create a government chatbot that provides factual information to users. "
-        "The chatbot pulls data from various government sources to answer queries."
+    
+    st.markdown(
+        "## Project Scope\n"
+        "The **Retirement Advisor Chatbot** is an innovative web application designed to provide users with accurate and timely information regarding retirement planning, particularly focused on the Central Provident Fund (CPF) in Singapore. By leveraging government data sources, the chatbot aims to assist individuals in understanding their retirement options and obligations, thereby empowering them to make informed decisions.\n\n"
+        
+        "## Objectives\n"
+        "Our primary objectives are:\n"
+        "- **Information Dissemination**: To offer accessible and clear information about CPF-related matters, including contributions, withdrawals, and retirement planning.\n"
+        "- **User Engagement**: To create an interactive experience where users can ask questions and receive personalized responses, enhancing their understanding of retirement processes.\n"
+        "- **Data Integration**: To consolidate various government data sources into a single platform, streamlining the user experience when seeking information.\n\n"
+        
+        "## Data Sources\n"
+        "The chatbot utilizes a range of APIs from official government sources to ensure that the information provided is both reliable and up-to-date. Key data sources include:\n"
+        "- **Number of CPF Members & Net Balances**: Provides insights into CPF memberships categorized by age group and gender.\n"
+        "- **Retirement Withdrawals**: Offers annual statistics on retirement withdrawals to inform users about trends and averages.\n"
+        "- **Full Retirement Sum**: Details the full retirement sum that individuals should aim for as part of their CPF savings.\n"
+        "- **Monthly Payouts under Retirement Sum Scheme**: Displays information about the monthly payouts available to individuals under the retirement scheme.\n\n"
+        
+        "## Features\n"
+        "The Retirement Advisor Chatbot includes several key features to enhance user interaction:\n"
+        "- **Personalized Responses**: Utilizes OpenAI’s language model to generate answers tailored to user queries, taking into account individual circumstances like age and employment status.\n"
+        "- **User Feedback Mechanism**: Allows users to provide feedback or compliments, which helps in continuously improving the chatbot's performance and user experience.\n"
+
     )
+
 
 # Methodology page
 def methodology():
