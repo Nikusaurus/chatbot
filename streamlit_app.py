@@ -191,4 +191,39 @@ def main():
         # Add a timestamp message
         current_time = datetime.now(sgt).strftime("%H:%M on %d/%m/%Y")
         st.markdown(
-            f'<start> <span style="font-size: smaller;">Our responses are based on historical data from <a href="https://data.gov.sg/" target="_blank">
+            f'<start> <span style="font-size: smaller;">Our responses are based on historical data from <a href="https://data.gov.sg/" target="_blank">data.gov.sg</a>. Current time is {current_time}.</span> </start>',
+            unsafe_allow_html=True
+        )
+
+        # User input for queries
+        user_input = st.text_input("Type your query here...", placeholder="Ask about CPF or retirement matters...")
+        
+        if st.button("Ask"):
+            if user_input:
+                user_info = {
+                    "gender": st.session_state.user_info.get("gender"),
+                    "age_group": st.session_state.user_info.get("age_group"),
+                    "employment_status": st.session_state.user_info.get("employment_status")
+                }
+                structured_prompt = create_structured_prompt(user_info, user_input)
+
+                # Generate response from the OpenAI API
+                try:
+                    response = client.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=[{"role": "user", "content": structured_prompt}],
+                        temperature=0  # Set to 0 for factual answers
+                    )
+                    st.success(response["choices"][0]["message"]["content"].strip())
+                except Exception as e:
+                    st.error(f"An error occurred: {str(e)}")  # Display any error messages
+            else:
+                st.warning("Please enter a query before asking.")  # Alert user if input is empty
+
+    elif page == "About Us":
+        about_us()
+    elif page == "Methodology":
+        methodology()
+
+if __name__ == "__main__":
+    main()
