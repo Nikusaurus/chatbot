@@ -258,8 +258,12 @@ def get_chatbot_response(user_input):
         ]
     )
     
-    # Return the assistant's reply, ensuring proper extraction
-    return response['choices'][0]['message']['content']  # Access the content correctly
+    # Extract the assistant's reply
+    answer_content = response.choices[0].message.content  # Accessing the content correctly
+    
+    # Return the assistant's reply
+    return answer_content
+
 
 
 
