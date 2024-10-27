@@ -3,6 +3,7 @@ from helper_functions.utility import check_password
 import json
 import requests
 from openai import OpenAI
+from openai import ChatCompletion  
 from datetime import datetime
 import pandas as pd
 import altair as alt
