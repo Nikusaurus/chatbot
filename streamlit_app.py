@@ -248,8 +248,10 @@ def get_chatbot_response(user_input):
     
     # Call to OpenAI API with CPF-focused context using the stored API key
     client = OpenAI(api_key=openai_api_key)  # Use the API key from Streamlit secrets
-    response = client.ChatCompletion.create(
-        model="gpt-4",
+    
+    # Generate a completion (response) using GPT-3.5 instead of GPT-4 for better compatibility
+    response = client.completions.create(
+        model="gpt-3.5-turbo",  # Adjust model if GPT-4 is not available in your setup
         messages=[
             {"role": "system", "content": "You are a CPF retirement advisor. Focus on Singapore's CPF system for all responses."},
             {"role": "user", "content": full_query}
@@ -258,6 +260,7 @@ def get_chatbot_response(user_input):
     
     # Return the assistant's reply
     return response['choices'][0]['message']['content']
+
 
 
 
