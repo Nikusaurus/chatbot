@@ -442,7 +442,7 @@ def main():
         # Add a timestamp message
         current_time = datetime.now(sgt).strftime("%H:%M on %d/%m/%Y")
         st.markdown(
-             f'<start> <span style="font-size: smaller;">Our responses are based on historical data from <a href="https://data.gov.sg/" target="_blank">data.gov.sg</a> as at {current_time}. For personalized consultations, please <a href="https://www.cpf.gov.sg/appt/oas/form" target="_blank">schedule an appointment</a> at one of our Service Centres.</span> <end>',
+            f'<start> <span style="font-size: smaller;">Our responses are based on historical data from <a href="https://data.gov.sg/" target="_blank">data.gov.sg</a> as at {current_time}. For personalized consultations, please <a href="https://www.cpf.gov.sg/appt/oas/form" target="_blank">schedule an appointment</a> at one of our Service Centres.</span> <end>',
             unsafe_allow_html=True)
 
         # Gather user information if not already collected
@@ -455,6 +455,9 @@ def main():
         # Create a session state variable to store the chat messages.
         if "messages" not in st.session_state:
             st.session_state.messages = []
+        
+        # Initialize conversation chain if not already set
+        if "conversation_chain" not in st.session_state:
             st.session_state.conversation_chain = []  # Initialize conversation chain
 
         # Display all messages in the chat
@@ -494,7 +497,8 @@ def main():
                 st.markdown(answer)
 
             # Add assistant response to the conversation chain to continue sequential processing
-            st.session_state.conversation_chain.append(answer)
+            if answer:  # Ensure that answer is not None or empty before appending
+                st.session_state.conversation_chain.append(answer)
 
     elif page == "About Us":
         about_us()
