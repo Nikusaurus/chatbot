@@ -238,10 +238,151 @@ def create_structured_prompt(user_info, prompt):
         "<End of User Input>"
     )
 
+
+
+# Function to handle OpenAI chatbot response with CPF context
+def get_chatbot_response(user_input):
+    # Always prepend the Singapore CPF context to the user input
+    context = "In Singapore's CPF system, "
+    full_query = context + user_input
+    
+    # Call to OpenAI API with CPF-focused context
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are a CPF retirement advisor. Focus on Singapore's CPF system for all responses."},
+            {"role": "user", "content": full_query}
+        ]
+    )
+    
+    # Return the assistant's reply
+    return response['choices'][0]['message']['content']
+
+
+
+
+
+# # Main function to control page routing and chatbot logic
+# def main():
+
+#     # Initialize page in session state if not already set
+#     if "page" not in st.session_state:
+#         st.session_state.page = "Chatbot"
+    
+#     st.sidebar.title("Navigation")
+#     page = st.sidebar.radio("Go to", ("Chatbot", "About Us", "Methodology"))
+
+#     # Manually control redirection using session state
+#     if st.session_state.page == "Feedback":
+#         handle_feedback()
+#         return
+
+#     if page == "Chatbot":
+#         # Show title and description.
+#         st.title("💬 Retirement Advisor")
+#         st.write(
+#             "This is an interactive chatbot that provides personalized information about retirement milestones and preparations related to your CPF."
+#         )
+
+#         # Display the disclaimer
+#         with st.expander("IMPORTANT NOTICE", expanded=False):
+#             st.write(""" 
+#             This web application is a prototype developed for educational purposes only. 
+#             The information provided here is NOT intended for real-world usage and should not be relied upon for making any decisions, especially those related to financial, legal, or healthcare matters.
+#             Furthermore, please be aware that the LLM may generate inaccurate or incorrect information. 
+#             You assume full responsibility for how you use any generated output.
+#             Always consult with qualified professionals for accurate and personalized advice.
+#             """)
+
+#         #### Password protection: Check if the password is correct
+#         if not check_password():
+#             st.stop()  # Stop the app if the password is incorrect
+
+#         # Use the OpenAI client with the secret API key
+#         client = OpenAI(api_key=openai_api_key)
+ 
+#         # Automatically fetch data from all API URLs (no output displayed)
+#         for api_url in api_urls.values():
+#             fetch_api_data(api_url)  # Just fetching without displaying any result
+
+
+#         # Set the timezone to Singapore Time
+#         sgt = pytz.timezone('Asia/Singapore')
+
+     
+#         # Add a timestamp message
+#         current_time = datetime.now(sgt).strftime("%H:%M on %d/%m/%Y")
+#         st.markdown(
+#              f'<start> <span style="font-size: smaller;">Our responses are based on historical data from <a href="https://data.gov.sg/" target="_blank">data.gov.sg</a> as at {current_time}. For personalized consultations, please <a href="https://www.cpf.gov.sg/appt/oas/form" target="_blank">schedule an appointment</a> at one of our Service Centres.</span> <end>',
+#     unsafe_allow_html=True)
+     
+#         # Gather user information if not already collected
+#         if "user_info" not in st.session_state:
+#             gather_user_info()
+#         else:
+#             # User information has already been collected, no need to gather again
+#             pass
+
+#         # Create a session state variable to store the chat messages.
+#         if "messages" not in st.session_state:
+#             st.session_state.messages = []
+#             st.session_state.conversation_chain = []  # Initialize conversation chain
+
+#         # Display all messages in the chat
+#         if "messages" in st.session_state:
+#             for message in st.session_state.messages:
+#                 with st.chat_message(message["role"]):
+#                     st.markdown(message["content"])
+
+#         # Create a chat input field to allow the user to enter a message.
+#         if prompt := st.chat_input("Ask a question about government services:"):
+#             # Store and display the current prompt.
+#             st.session_state.messages.append({"role": "user", "content": prompt})
+#             with st.chat_message("user"):
+#                 st.markdown(prompt)
+
+#             # Generate a structured prompt based on user information (if provided)
+#             if "user_info" in st.session_state:
+#                 user_info = st.session_state.user_info
+#                 structured_prompt = create_structured_prompt(user_info, prompt)
+#             else:
+#                 # If no user info is provided, fallback to a basic prompt
+#                 structured_prompt = f"<User Query>\n{prompt}\n<End of User Input>"
+
+#             # Store the structured prompt in session state
+#             st.session_state.messages.append({"role": "user", "content": structured_prompt})
+
+#             # Add structured prompt to the conversation chain
+#             st.session_state.conversation_chain.append(structured_prompt)
+
+#             # Generate a response using the OpenAI API with a factual setting.
+#             response = client.chat.completions.create(
+#                 model="gpt-3.5-turbo",
+#                 messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages] + 
+#                          [{"role": "assistant", "content": step} for step in st.session_state.conversation_chain],
+#                 temperature=0,  # Set temperature to 0 for factual responses
+#             )
+
+#             # Extract and display the response
+#             answer = response.choices[0].message.content.strip()
+#             st.session_state.messages.append({"role": "assistant", "content": answer})
+
+#             with st.chat_message("assistant"):
+#                 st.markdown(answer)
+
+#             # Add assistant response to the conversation chain to continue sequential processing
+#             st.session_state.conversation_chain.append(answer)
+
+#     elif page == "About Us":
+#         about_us()
+#     elif page == "Methodology":
+#         methodology()
+
+# if __name__ == "__main__":
+#     main()
+
 # Main function to control page routing and chatbot logic
 def main():
-
- 
 
     # Initialize page in session state if not already set
     if "page" not in st.session_state:
@@ -256,7 +397,7 @@ def main():
         return
 
     if page == "Chatbot":
-        # Show title and description.
+        # Show title and description
         st.title("💬 Retirement Advisor")
         st.write(
             "This is an interactive chatbot that provides personalized information about retirement milestones and preparations related to your CPF."
@@ -276,24 +417,19 @@ def main():
         if not check_password():
             st.stop()  # Stop the app if the password is incorrect
 
-        # Use the OpenAI client with the secret API key
-        client = OpenAI(api_key=openai_api_key)
- 
         # Automatically fetch data from all API URLs (no output displayed)
         for api_url in api_urls.values():
             fetch_api_data(api_url)  # Just fetching without displaying any result
 
-
         # Set the timezone to Singapore Time
         sgt = pytz.timezone('Asia/Singapore')
 
-     
         # Add a timestamp message
         current_time = datetime.now(sgt).strftime("%H:%M on %d/%m/%Y")
         st.markdown(
              f'<start> <span style="font-size: smaller;">Our responses are based on historical data from <a href="https://data.gov.sg/" target="_blank">data.gov.sg</a> as at {current_time}. For personalized consultations, please <a href="https://www.cpf.gov.sg/appt/oas/form" target="_blank">schedule an appointment</a> at one of our Service Centres.</span> <end>',
-    unsafe_allow_html=True)
-     
+            unsafe_allow_html=True)
+
         # Gather user information if not already collected
         if "user_info" not in st.session_state:
             gather_user_info()
@@ -333,16 +469,10 @@ def main():
             # Add structured prompt to the conversation chain
             st.session_state.conversation_chain.append(structured_prompt)
 
-            # Generate a response using the OpenAI API with a factual setting.
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages] + 
-                         [{"role": "assistant", "content": step} for step in st.session_state.conversation_chain],
-                temperature=0,  # Set temperature to 0 for factual responses
-            )
+            # Use the `get_chatbot_response` function to get CPF-contextual response
+            answer = get_chatbot_response(structured_prompt)
 
-            # Extract and display the response
-            answer = response.choices[0].message.content.strip()
+            # Store the assistant's response in session state
             st.session_state.messages.append({"role": "assistant", "content": answer})
 
             with st.chat_message("assistant"):
@@ -355,6 +485,7 @@ def main():
         about_us()
     elif page == "Methodology":
         methodology()
+
 
 if __name__ == "__main__":
     main()
