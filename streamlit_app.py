@@ -110,10 +110,10 @@ def methodology():
     # Display the image
     
     # Example image URL (make sure this is a direct link to an image)
-    image_url = "https://example.com/path/to/image.jpg"
+    image_url = "https://i.postimg.cc/SxVTystS/use-case-3.jpg"
     
     # Display the image
-    st.image(image_url, caption="Use Case 1", use_column_width=True)
+    st.image(image_url, caption="Use Case 2", use_column_width=True)
 
     # Use Case 3: Customer Satisfaction Evaluation
     st.subheader("3. Customer Satisfaction Evaluation")
