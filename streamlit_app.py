@@ -92,7 +92,7 @@ def methodology():
 
     
     # Display the image
-    st.image("https://postimg.cc/TpHJnKZn][img]https://i.postimg.cc/TpHJnKZn/use-case-1.jpg", caption="USe Case 1", use_column_width=True)
+    st.image("https://postimg.cc/TpHJnKZn", caption="USe Case 1", use_column_width=True)
     
      
     # Use Case 2: Personalized Adviser
@@ -108,7 +108,7 @@ def methodology():
     )
 
     # Display the image
-    st.image("https://postimg.cc/jDp6kGq5][img]https://i.postimg.cc/jDp6kGq5/use-case-2.jpg", caption="Use Case 2", use_column_width=True)
+    st.image("https://postimg.cc/jDp6kGq5", caption="Use Case 2", use_column_width=True)
 
     # Use Case 3: Customer Satisfaction Evaluation
     st.subheader("3. Customer Satisfaction Evaluation")
@@ -121,7 +121,7 @@ def methodology():
     )
 
     # Display the image
-    st.image("https://postimg.cc/K1krfZ2w][img]https://i.postimg.cc/K1krfZ2w/use-case-3.jpg", caption="Use Case 3", use_column_width=True)
+    st.image("https://postimg.cc/K1krfZ2w", caption="Use Case 3", use_column_width=True)
 
  
     # Summary
