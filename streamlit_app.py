@@ -251,13 +251,22 @@ def get_chatbot_response(user_input):
     client = OpenAI(api_key=openai_api_key)  # Use the API key from Streamlit secrets
     
     # Generate a completion (response) using GPT-3.5 instead of GPT-4 for better compatibility
-    response = client.completions.create(
-        model="gpt-3.5-turbo",  # Adjust model if GPT-4 is not available in your setup
+    # response = client.completions.create(
+    #     model="gpt-3.5-turbo",  # Adjust model if GPT-4 is not available in your setup
+    #     messages=[
+    #         {"role": "system", "content": "You are a CPF retirement advisor. Focus on Singapore's CPF system for all responses."},
+    #         {"role": "user", "content": full_query}
+    #     ]
+    # )
+
+     response = client.chat.completions.create(
+        model="gpt-3.5-turbo",  # Ensure you're using the correct model name
         messages=[
             {"role": "system", "content": "You are a CPF retirement advisor. Focus on Singapore's CPF system for all responses."},
             {"role": "user", "content": full_query}
         ]
     )
+
     
     # Return the assistant's reply
     return response['choices'][0]['message']['content']
