@@ -259,13 +259,13 @@ def get_chatbot_response(user_input):
     #     ]
     # )
 
-     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",  # Ensure you're using the correct model name
-        messages=[
-            {"role": "system", "content": "You are a CPF retirement advisor. Focus on Singapore's CPF system for all responses."},
-            {"role": "user", "content": full_query}
-        ]
-    )
+    response = client.chat.completions.create(
+       model="gpt-3.5-turbo",  # Ensure you're using the correct model name
+       messages=[
+           {"role": "system", "content": "You are a CPF retirement advisor. Focus on Singapore's CPF system for all responses."},
+           {"role": "user", "content": full_query}
+       ]
+   )
 
     
     # Return the assistant's reply
