@@ -240,7 +240,6 @@ def create_structured_prompt(user_info, prompt):
     )
 
 
-
 # Function to handle OpenAI chatbot response with CPF context
 def get_chatbot_response(user_input):
     # Always prepend the Singapore CPF context to the user input
@@ -250,26 +249,17 @@ def get_chatbot_response(user_input):
     # Call to OpenAI API with CPF-focused context using the stored API key
     client = OpenAI(api_key=openai_api_key)  # Use the API key from Streamlit secrets
     
-    # Generate a completion (response) using GPT-3.5 instead of GPT-4 for better compatibility
-    # response = client.completions.create(
-    #     model="gpt-3.5-turbo",  # Adjust model if GPT-4 is not available in your setup
-    #     messages=[
-    #         {"role": "system", "content": "You are a CPF retirement advisor. Focus on Singapore's CPF system for all responses."},
-    #         {"role": "user", "content": full_query}
-    #     ]
-    # )
-
+    # Generate a completion (response) using GPT-3.5
     response = client.chat.completions.create(
-       model="gpt-3.5-turbo",  # Ensure you're using the correct model name
-       messages=[
-           {"role": "system", "content": "You are a CPF retirement advisor. Focus on Singapore's CPF system for all responses."},
-           {"role": "user", "content": full_query}
-       ]
-   )
-
+        model="gpt-3.5-turbo",  # Ensure you're using the correct model name
+        messages=[
+            {"role": "system", "content": "You are a CPF retirement advisor. Focus on Singapore's CPF system for all responses."},
+            {"role": "user", "content": full_query}
+        ]
+    )
     
-    # Return the assistant's reply
-    return response['choices'][0]['message']['content']
+    # Return the assistant's reply, ensuring proper extraction
+    return response['choices'][0]['message']['content']  # Access the content correctly
 
 
 
@@ -486,22 +476,23 @@ def main():
             # Use the `get_chatbot_response` function to get CPF-contextual response
             try:
                 answer = get_chatbot_response(structured_prompt)
-
+            
                 # Ensure the answer is a string before appending
                 if isinstance(answer, str):
                     # Store the assistant's response in session state
                     st.session_state.messages.append({"role": "assistant", "content": answer})
-
+            
                     with st.chat_message("assistant"):
                         st.markdown(answer)
-
+            
                     # Add assistant response to the conversation chain to continue sequential processing
                     st.session_state.conversation_chain.append(answer)
                 else:
                     st.markdown("I encountered an error retrieving the response. Please try again.")
-
+            
             except Exception as e:
                 st.markdown(f"An error occurred while fetching the response: {e}")
+
 
     elif page == "About Us":
         about_us()
